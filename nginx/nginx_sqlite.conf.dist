@@ -1,5 +1,5 @@
 # openrvdas_nginx.conf
-user            RVDAS_USER;
+user            RVDAS_USER RVDAS_GROUP;
 error_log       /var/log/openrvdas/nginx.stderr;
 
 worker_processes  auto;

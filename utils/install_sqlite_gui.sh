@@ -80,6 +80,7 @@ function set_default_variables {
 ###########################################################################
 # Save defaults in a preferences file for the next time we run.
 function save_default_variables {
+    rm -f $PREFERENCES_FILE || sudo rm -f $PREFERENCES_FILE
     cat > $PREFERENCES_FILE <<EOF
 # Defaults written by/to be read by install_sqlite_gui.sh
 OS_TYPE=${OS_TYPE}
@@ -181,7 +182,7 @@ function setup_supervisor {
 
         FCGI_PATH=/usr/local
         FCGI_SOCKET=/var/run/fcgiwrap.sock
-        SOCKET_GROUP=wheel
+        RVDAS_GROUP=wheel
         NGINX_PATH=/usr/local/bin
         NGINX_FILES=/usr/local/etc/nginx
 
@@ -201,7 +202,7 @@ function setup_supervisor {
 
         FCGI_PATH=/usr
         FCGI_SOCKET=/var/run/supervisor/fcgiwrap.sock
-        SOCKET_GROUP=$RVDAS_USER
+        RVDAS_GROUP=$RVDAS_USER
         NGINX_PATH=/usr/sbin
         NGINX_FILES=/etc/nginx
 
@@ -223,7 +224,7 @@ function setup_supervisor {
 
         FCGI_PATH=/usr
         FCGI_SOCKET=/var/run/fcgiwrap.sock
-        SOCKET_GROUP=$RVDAS_USER
+        RVDAS_GROUP=$RVDAS_USER
         NGINX_PATH=/usr/sbin
         NGINX_FILES=/etc/nginx
     fi
@@ -243,8 +244,8 @@ function setup_supervisor {
             # First replace variables in the file with actual installation-specific values
             $SED_IE "s#OPENRVDAS_ROOT#${OPENRVDAS_ROOT}#g" ${SUPERVISOR_TEMP_FILE}
             $SED_IE "s#RVDAS_USER#${RVDAS_USER}#g" ${SUPERVISOR_TEMP_FILE}
+            $SED_IE "s#RVDAS_GROUP#${RVDAS_GROUP}#g" ${SUPERVISOR_TEMP_FILE}
             $SED_IE "s#SUPERVISOR_SOCKET#${SUPERVISOR_SOCKET}#g" ${SUPERVISOR_TEMP_FILE}
-            $SED_IE "s#SOCKET_GROUP#${SOCKET_GROUP}#g" ${SUPERVISOR_TEMP_FILE}
             $SED_IE "s#FCGI_PATH#${FCGI_PATH}#g" ${SUPERVISOR_TEMP_FILE}
             $SED_IE "s#FCGI_SOCKET#${FCGI_SOCKET}#g" ${SUPERVISOR_TEMP_FILE}
             $SED_IE "s#NGINX_PATH#${NGINX_PATH}#g" ${SUPERVISOR_TEMP_FILE}
@@ -382,6 +383,7 @@ function setup_nginx {
     # Fill in wildcards for differences between architectures
     $SED_IE "s#OPENRVDAS_ROOT#${OPENRVDAS_ROOT}#g" ${NGINXDIR}/nginx_sqlite.conf
     $SED_IE "s#RVDAS_USER#${RVDAS_USER}#g" ${NGINXDIR}/nginx_sqlite.conf
+    $SED_IE "s#RVDAS_GROUP#${RVDAS_GROUP}#g" ${NGINXDIR}/nginx_sqlite.conf
     $SED_IE "s#NGINX_PATH#${NGINX_PATH}#g" ${NGINXDIR}/nginx_sqlite.conf
     $SED_IE "s#NGINX_FILES#${NGINX_FILES}#g" ${NGINXDIR}/nginx_sqlite.conf
     $SED_IE "s#FCGI_PATH#${FCGI_PATH}#g" ${NGINXDIR}/nginx_sqlite.conf
