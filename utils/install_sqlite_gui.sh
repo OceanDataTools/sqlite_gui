@@ -163,6 +163,16 @@ function determine_flavor {
 
     echo "#####################################################################"
     echo "Detected OS = $OS_TYPE"
+
+    # Ugh - spawn_fcgi has been deprecated in v9; waiting on a workaround
+    if [[ '$OS_TYPE' == 'CentOS' ]; then
+        if [[`grep "VERSION_ID=\"9" /etc/os-release` || `grep "VERSION=\"9" /etc/os-release` ]];then
+            echo "****"
+            echo "CAUTION: current sqlite_gui may not install properly on Rocky/CentOS/RHEL Version 9 due to"
+            echo "deprecation of spawn_fcgi script. Assume crash position..."
+            echo "****"
+        fi
+    fi
 }
 
 ###########################################################################
