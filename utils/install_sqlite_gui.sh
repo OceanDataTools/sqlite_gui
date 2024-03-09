@@ -487,7 +487,6 @@ else
 fi
 
 # Ugh - spawn_fcgi has been deprecated in v9; waiting on a workaround
-echo "$OS_TYPE" == 'CentOS'
 if [[ "$OS_TYPE" == 'CentOS' ]]; then
     if [[ `grep "VERSION_ID=\"9" /etc/os-release` || `grep "VERSION=\"9" /etc/os-release` ]];then
         echo "**************************************************************************"
